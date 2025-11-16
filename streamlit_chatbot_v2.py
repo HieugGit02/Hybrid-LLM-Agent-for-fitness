@@ -44,246 +44,323 @@ if "messages" not in st.session_state:
 # =====================================================
 st.markdown("""
 <style>
-  :root {
-    --bg: #f5f7fa;
-    --card: #ffffff;
-    --muted: #64748b;
-    --accent: #3b82f6;
-    --accent-dark: #1e40af;
-    --border: #e2e8f0;
-    --text: #0f172a;
-  }
-  
-  * { box-sizing: border-box; }
-  
-  html, body {
-    height: 100%;
-    overflow: hidden;
-  }
-  
-  .main {
-    padding: 0 !important;
-    background: var(--bg);
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  /* Force sidebar to stay visible */
-  [data-testid="stSidebar"] {
-    background: var(--card);
-    width: 280px !important;
-    min-width: 280px !important;
-  }
-  
-  [data-testid="stSidebar"][aria-expanded="false"] {
-    display: flex !important;
-    width: 280px !important;
-  }
-  
-  .block-container {
-    padding-top: 1.25rem;
-    padding-bottom: 140px;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Minimal header */
-  .header-container {
-    background: transparent;
-    padding: 0 0 1rem 0;
-    margin-bottom: 0.5rem;
-    flex-shrink: 0;
-  }
-  
-  .header-title {
-    font-size: 1.75rem;
-    font-weight: 800;
-    color: var(--text);
-    margin: 0;
-    letter-spacing: -0.5px;
-  }
-  
-  .header-subtitle {
-    color: var(--muted);
-    margin-top: 0.25rem;
-    font-size: 0.9rem;
-    font-weight: 400;
-  }
-  
-  /* Chat container - flexible, fills space */
-  .chat-container {
-    flex: 1;
-    overflow-y: auto;
-    padding: 0.5rem 0;
-    scroll-behavior: smooth;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-  
-  /* Chat message bubbles - elegant & rounded */
-  .chat-message {
-    display: flex;
-    margin: 0.6rem 0;
-    gap: 0.5rem;
-    padding: 0;
-    animation: fadeIn 0.2s ease-in;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(4px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  .user-message {
-    justify-content: flex-end;
-  }
-  
-  .user-message .message-content {
-    background: var(--accent);
-    color: white;
-    padding: 0.8rem 1.1rem;
-    border-radius: 18px;
-    border-bottom-right-radius: 4px;
-    max-width: 65%;
-    word-wrap: break-word;
-    box-shadow: 0 1px 3px rgba(59, 130, 246, 0.2);
-    font-size: 0.95rem;
-    line-height: 1.4;
-  }
-  
-  .bot-message {
-    justify-content: flex-start;
-  }
-  
-  .bot-message .message-content {
-    background: var(--card);
-    color: var(--text);
-    padding: 0.8rem 1.1rem;
-    border-radius: 18px;
-    border-bottom-left-radius: 4px;
-    max-width: 65%;
-    word-wrap: break-word;
-    border: 1px solid var(--border);
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
-    font-size: 0.95rem;
-    line-height: 1.4;
-  }
-  
-  .error-message {
-    justify-content: center;
-  }
-  
-  .error-message .message-content {
-    background: #fef2f2;
-    color: #991b1b;
-    padding: 0.8rem 1.1rem;
-    border-radius: 8px;
-    border-left: 3px solid #dc2626;
-    max-width: 75%;
-    font-size: 0.95rem;
-  }
-  
-  .message-icon {
-    font-size: 1.1rem;
-    margin-top: 0.2rem;
-    flex-shrink: 0;
-  }
-  
-  .message-content {
-    flex: 0 0 auto;
-  }
-  
-  .message-time {
-    font-size: 0.7rem;
-    color: var(--muted);
-    margin-top: 0.25rem;
-    display: none;
-  }
-  
-  /* Fixed input area */
-  .input-container {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(180deg, var(--card) 0%, rgba(255, 255, 255, 0.98) 100%);
-    padding: 12px 16px;
-    border-top: 1px solid var(--border);
-    box-shadow: 0 -2px 8px rgba(15, 23, 42, 0.06);
-    z-index: 999;
-  }
-  
-  /* Sidebar styling */
-  [data-testid="stSidebar"] {
-    border-right: 1px solid var(--border);
-  }
-  
-  /* Scrollbar styling */
-  .chat-container::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  .chat-container::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  .chat-container::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 3px;
-  }
-  
-  .chat-container::-webkit-scrollbar-thumb:hover {
-    background: #cbd5e1;
-  }
-  
-  /* Responsive */
-  @media (max-width: 768px) {
-    [data-testid="stSidebar"] {
-      width: 250px !important;
-      min-width: 250px !important;
+    /* Main container */
+    .main {
+        padding: 0 !important;
     }
     
-    .user-message .message-content,
-    .bot-message .message-content {
-      max-width: 80%;
+    /* Remove top padding */
+    .block-container {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
     }
-  }
+    
+    /* Header styling */
+    .header-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 2rem 1rem;
+        border-radius: 0;
+        margin: -1rem -1rem 2rem -1rem;
+        color: white;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .header-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .header-subtitle {
+        font-size: 1rem;
+        opacity: 0.95;
+        margin-top: 0.5rem;
+    }
+    
+    /* Chat messages container */
+    .chat-container {
+        max-height: calc(100vh - 400px);
+        overflow-y: auto;
+        padding: 1.5rem 0;
+        scroll-behavior: smooth;
+    }
+    
+    /* Message styling */
+    .chat-message {
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        display: flex;
+        gap: 0.75rem;
+        animation: slideIn 0.3s ease-out;
+    }
+    
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .user-message {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-left: 4px solid #667eea;
+        margin-left: 2rem;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+    }
+    
+    .bot-message {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        border-left: 4px solid #f5576c;
+        margin-right: 2rem;
+        box-shadow: 0 2px 8px rgba(245, 87, 108, 0.2);
+    }
+    
+    .error-message {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        color: white;
+        border-left: 4px solid #ff6b6b;
+        box-shadow: 0 2px 8px rgba(255, 107, 107, 0.2);
+    }
+    
+    .message-icon {
+        font-size: 1.5rem;
+        min-width: 2rem;
+        text-align: center;
+    }
+    
+    .message-content {
+        flex: 1;
+        line-height: 1.6;
+    }
+    
+    .message-time {
+        font-size: 0.75rem;
+        opacity: 0.8;
+        margin-top: 0.5rem;
+    }
+    
+    /* Input area - FOLLOWS SCROLL (relative, not fixed) */
+    .input-container {
+        position: relative;
+        background: linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, white 100%);
+        padding: 1.5rem 1rem;
+        margin-top: 2rem;
+        border-top: 2px solid #e0e0e0;
+        box-shadow: 0 -4px 15px rgba(0,0,0,0.08);
+        border-radius: 12px 12px 0 0;
+    }
+    
+    @media (max-width: 768px) {
+        .input-container {
+            padding: 1rem 0.75rem;
+            margin-top: 1rem;
+        }
+    }
+    
+    /* Form styling */
+    .form-input {
+        border-radius: 12px;
+        border: 2px solid #e0e0e0;
+        transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    /* Button styling */
+    .stButton > button {
+        border-radius: 10px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+    }
+    
+    .stButton > button:active {
+        transform: translateY(0);
+    }
+    
+    /* Sidebar styling */
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+    }
+    
+    .sidebar-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin: 0.5rem 0;
+    }
+    
+    .status-online {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+    
+    .status-offline {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    }
+    
+    /* Divider */
+    .divider {
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #667eea, transparent);
+        margin: 1.5rem 0;
+    }
+    
+    /* Footer text */
+    .footer-text {
+        text-align: center;
+        font-size: 0.875rem;
+        color: #999;
+        margin-top: 2rem;
+    }
+    
+    /* Loading spinner */
+    .loading-text {
+        text-align: center;
+        color: #667eea;
+        font-weight: 600;
+    }
 </style>
 """, unsafe_allow_html=True)
 
 # =====================================================
-# 📊 SIDEBAR - MINIMAL (Only API config)
+# 📊 SIDEBAR
 # =====================================================
 with st.sidebar:
-    st.title("⚙️ Cài Đặt")
+    st.markdown("""
+    <div class="sidebar-header">
+        <h2 style="margin: 0; font-size: 1.5rem;">⚙️ Cài Đặt</h2>
+        <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">Quản lý kết nối API</p>
+    </div>
+    """, unsafe_allow_html=True)
     
     # API URL Configuration
+    st.subheader("🌐 Ngrok API")
     api_input = st.text_input(
-        "Ngrok URL:",
+        "Nhập URL từ Colab:",
         value=st.session_state.get("api_url", API_URL),
-        placeholder="https://xxxxx.ngrok-free.app"
+        placeholder="https://xxxxx.ngrok-free.app",
+        help="Dán URL Ngrok từ Colab ở đây"
     )
     
     if api_input and api_input != st.session_state.get("api_url"):
         new_url = api_input.rstrip('/')
         st.session_state["api_url"] = new_url
-        st.success("✅ Đã cập nhật")
+        st.success("✅ URL cập nhật thành công!")
     
     # Health Check
-    if st.button("🔄 Kiểm tra kết nối", use_container_width=True):
-        try:
-            health_url = f"{st.session_state.get('api_url')}/health"
-            response = requests.get(health_url, timeout=5)
-            if response.status_code == 200:
-                st.success("🟢 Kết nối OK")
-            else:
-                st.error("🔴 Lỗi Server")
-        except Exception as e:
-            st.error("🔴 Mất kết nối")
+    st.subheader("🔌 Kiểm Tra Kết Nối")
+    col1, col2 = st.columns([0.7, 0.3])
+    
+    with col1:
+        if st.button("🔄 Kiểm tra", use_container_width=True):
+            try:
+                health_url = f"{st.session_state.get('api_url')}/health"
+                response = requests.get(health_url, timeout=5)
+                if response.status_code == 200:
+                    st.markdown('<div class="status-badge status-online">🟢 Kết nối OK</div>', 
+                              unsafe_allow_html=True)
+                    with st.expander("📊 Chi tiết"):
+                        st.json(response.json())
+                else:
+                    st.markdown('<div class="status-badge status-offline">🔴 Lỗi Server</div>', 
+                              unsafe_allow_html=True)
+            except Exception as e:
+                st.markdown('<div class="status-badge status-offline">🔴 Mất kết nối</div>', 
+                          unsafe_allow_html=True)
+                st.error(f"Lỗi: {str(e)[:50]}")
+    
+    with col2:
+        current_url = st.session_state.get("api_url", API_URL)
+        if current_url.startswith("http"):
+            st.success("✅")
+        else:
+            st.warning("⚠️")
+    
+    st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
+    
+    # Usage Guide
+    st.subheader("📖 Hướng Dẫn")
+    st.markdown("""
+    **Bước 1:** Sao chép Ngrok URL từ Colab  
+    **Bước 2:** Dán vào ô "Nhập URL từ Colab"  
+    **Bước 3:** Click "Kiểm tra" để xác nhận  
+    **Bước 4:** Hỏi câu hỏi về dinh dưỡng!
+    
+    **Ví dụ câu hỏi:**
+    - "Ức gà bao nhiêu đạm?"
+    - "Chuối vs táo cái nào ít calo?"
+    - "Các loại rau xanh tốt nhất?"
+    """)
+    
+    st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
+    
+    # Clear History
+    st.subheader("🧹 Quản Lý")
+    if st.button("🗑️ Xóa lịch sử chat", use_container_width=True):
+        st.session_state.messages = []
+        st.success("✅ Đã xóa tất cả tin nhắn!")
+    
+    # Stats
+    st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
+    st.subheader("📊 Thống Kê")
+    message_count = len(st.session_state.messages)
+    user_count = sum(1 for m in st.session_state.messages if m["role"] == "user")
+    st.metric("Tổng tin nhắn", message_count)
+    st.metric("Câu hỏi của bạn", user_count)
 
 # =====================================================
 # 📱 MAIN CONTENT AREA
@@ -300,7 +377,7 @@ st.markdown("""
 # =====================================================
 # 💬 CHAT HISTORY
 # =====================================================
-st.markdown('<div class="chat-container" id="chat-box">', unsafe_allow_html=True)
+st.markdown('<div class="chat-container">', unsafe_allow_html=True)
 
 if len(st.session_state.messages) == 0:
     st.markdown("""
@@ -315,8 +392,11 @@ else:
         if message["role"] == "user":
             st.markdown(f"""
             <div class="chat-message user-message">
+                <div class="message-icon">👤</div>
                 <div class="message-content">
+                    <strong>Bạn:</strong><br>
                     {message['content']}
+                    <div class="message-time">{message.get('time', '')}</div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -326,7 +406,9 @@ else:
             <div class="chat-message bot-message">
                 <div class="message-icon">🤖</div>
                 <div class="message-content">
+                    <strong>Hinne:</strong><br>
                     {message['content']}
+                    <div class="message-time">{message.get('time', '')}</div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -334,37 +416,37 @@ else:
         elif message["role"] == "error":
             st.markdown(f"""
             <div class="chat-message error-message">
+                <div class="message-icon">⚠️</div>
                 <div class="message-content">
                     {message['content']}
+                    <div class="message-time">{message.get('time', '')}</div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-st.markdown("""
-<script>
-  (function(){
-    const chat = document.getElementById('chat-box');
-    if(chat){ setTimeout(() => { chat.scrollTop = chat.scrollHeight; }, 100); }
-    setTimeout(() => {
-      const inputs = document.querySelectorAll('input[type="text"]');
-      if(inputs.length > 0) inputs[inputs.length - 1].focus();
-    }, 50);
-  })();
-</script>
-""", unsafe_allow_html=True)
+# =====================================================
+# 📝 INPUT AREA (FOLLOWS SCROLL)
+# =====================================================
 
-# =====================================================
-# 📝 INPUT AREA (FIXED AT BOTTOM - minimal, professional)
-# =====================================================
 st.markdown('<div class="input-container">', unsafe_allow_html=True)
-with st.form('chat_form', clear_on_submit=True):
-    cols = st.columns([1, 0.18])
-    with cols[0]:
-        user_input = st.text_input('', placeholder='Ví dụ: Ức gà bao nhiêu đạm? • Chuối có bao nhiêu calo?', key='form_user_input', label_visibility='collapsed')
-    with cols[1]:
-        send_button = st.form_submit_button('Gửi')
+
+# Input form
+with st.form("chat_form", clear_on_submit=True):
+    col1, col2 = st.columns([0.92, 0.08], gap="small")
+    
+    with col1:
+        user_input = st.text_input(
+            "💭 Hỏi tôi gì đó...",
+            placeholder="Ví dụ: Ức gà bao nhiêu đạm? • Chuối có bao nhiêu calo?",
+            key="form_user_input",
+            label_visibility="collapsed"
+        )
+    
+    with col2:
+        send_button = st.form_submit_button("📤", use_container_width=True)
+
 st.markdown('</div>', unsafe_allow_html=True)
 
 # =====================================================
@@ -438,3 +520,15 @@ if send_button and user_input:
     
     # Rerun to show new message and clear input
     st.rerun()
+
+# =====================================================
+# 📋 FOOTER
+# =====================================================
+st.markdown("""
+<div class="footer-text">
+    <hr style="margin: 2rem 0; border: none; border-top: 1px solid #eee;">
+    🔗 API: Colab + Ngrok + Local &nbsp;•&nbsp; 
+    💾 Chat history lưu trong session &nbsp;•&nbsp; 
+    ✨ Powered by LangChain RAG
+</div>
+""", unsafe_allow_html=True)
