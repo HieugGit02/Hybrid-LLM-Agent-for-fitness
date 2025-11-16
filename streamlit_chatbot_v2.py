@@ -81,10 +81,11 @@ st.markdown("""
     
     /* Chat messages container */
     .chat-container {
-        max-height: calc(100vh - 400px);
         overflow-y: auto;
-        padding: 1.5rem 0;
+        padding: 1.5rem 0 150px 0;
         scroll-behavior: smooth;
+        display: flex;
+        flex-direction: column;
     }
     
     /* Message styling */
@@ -148,22 +149,17 @@ st.markdown("""
         margin-top: 0.5rem;
     }
     
-    /* Input area - FOLLOWS SCROLL (relative, not fixed) */
+    /* Input area - FOLLOWS SCROLL using STICKY */
     .input-container {
-        position: relative;
-        background: linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, white 100%);
+        position: sticky;
+        bottom: 0;
+        background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, white 100%);
         padding: 1.5rem 1rem;
-        margin-top: 2rem;
         border-top: 2px solid #e0e0e0;
-        box-shadow: 0 -4px 15px rgba(0,0,0,0.08);
+        box-shadow: 0 -8px 20px rgba(0,0,0,0.12);
         border-radius: 12px 12px 0 0;
-    }
-    
-    @media (max-width: 768px) {
-        .input-container {
-            padding: 1rem 0.75rem;
-            margin-top: 1rem;
-        }
+        z-index: 100;
+        margin-top: auto;
     }
     
     /* Form styling */
@@ -424,12 +420,9 @@ else:
             </div>
             """, unsafe_allow_html=True)
 
-st.markdown('</div>', unsafe_allow_html=True)
-
 # =====================================================
-# 📝 INPUT AREA (FOLLOWS SCROLL)
+# 📝 INPUT AREA (STICKY - Di theo scroll)
 # =====================================================
-
 st.markdown('<div class="input-container">', unsafe_allow_html=True)
 
 # Input form
@@ -448,6 +441,7 @@ with st.form("chat_form", clear_on_submit=True):
         send_button = st.form_submit_button("📤", use_container_width=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)  # Close chat-container
 
 # =====================================================
 # 🔄 PROCESS MESSAGE
