@@ -47,19 +47,14 @@ st.markdown("""
     /* Main container */
     .main {
         padding: 0 !important;
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
     }
     
     /* Remove top padding */
     .block-container {
         padding-top: 1rem;
-        padding-bottom: 0;
-        overflow: hidden;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
+        padding-bottom: 200px;
+        padding-right: 1rem;
+        padding-left: 1rem;
     }
     
     /* Header styling */
@@ -71,7 +66,6 @@ st.markdown("""
         color: white;
         text-align: center;
         box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        flex-shrink: 0;
     }
     
     .header-title {
@@ -90,11 +84,8 @@ st.markdown("""
     /* Chat messages container */
     .chat-container {
         overflow-y: auto;
-        padding: 1.5rem;
+        padding: 1.5rem 0;
         scroll-behavior: smooth;
-        display: flex;
-        flex-direction: column;
-        flex: 1;
     }
     
     /* Message styling */
@@ -448,11 +439,6 @@ st.markdown("""
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 </script>
-""", unsafe_allow_html=True)
-
-# Add spacing for fixed input (so content doesn't hide behind it)
-st.markdown("""
-<div style="height: 180px;"></div>
 """, unsafe_allow_html=True)
 
 # =====================================================
