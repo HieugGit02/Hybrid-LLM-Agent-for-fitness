@@ -47,12 +47,19 @@ st.markdown("""
     /* Main container */
     .main {
         padding: 0 !important;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
     }
     
     /* Remove top padding */
     .block-container {
         padding-top: 1rem;
-        padding-bottom: 1rem;
+        padding-bottom: 0;
+        overflow: hidden;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
     }
     
     /* Header styling */
@@ -60,10 +67,11 @@ st.markdown("""
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         padding: 2rem 1rem;
         border-radius: 0;
-        margin: -1rem -1rem 2rem -1rem;
+        margin: -1rem -1rem 1rem -1rem;
         color: white;
         text-align: center;
         box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        flex-shrink: 0;
     }
     
     .header-title {
@@ -82,10 +90,11 @@ st.markdown("""
     /* Chat messages container */
     .chat-container {
         overflow-y: auto;
-        padding: 1.5rem 0 150px 0;
+        padding: 1.5rem;
         scroll-behavior: smooth;
         display: flex;
         flex-direction: column;
+        flex: 1;
     }
     
     /* Message styling */
@@ -149,17 +158,26 @@ st.markdown("""
         margin-top: 0.5rem;
     }
     
-    /* Input area - FOLLOWS SCROLL using STICKY */
+    /* Input area - FIXED AT BOTTOM (như ChatGPT) */
     .input-container {
-        position: sticky;
+        position: fixed;
         bottom: 0;
+        left: 0;
+        right: 0;
         background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, white 100%);
         padding: 1.5rem 1rem;
         border-top: 2px solid #e0e0e0;
         box-shadow: 0 -8px 20px rgba(0,0,0,0.12);
-        border-radius: 12px 12px 0 0;
-        z-index: 100;
-        margin-top: auto;
+        z-index: 999;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Adjust Streamlit sidebar if needed */
+    @media (min-width: 768px) {
+        [data-testid="stSidebar"][aria-expanded="true"] ~ .main {
+            margin-left: 0;
+        }
     }
     
     /* Form styling */
@@ -373,11 +391,11 @@ st.markdown("""
 # =====================================================
 # 💬 CHAT HISTORY
 # =====================================================
-st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+st.markdown('<div class="chat-container" id="chat-box">', unsafe_allow_html=True)
 
 if len(st.session_state.messages) == 0:
     st.markdown("""
-    <div style="text-align: center; padding: 3rem 1rem; color: #999;">
+    <div style="text-align: center; padding: 3rem 1rem; color: #999; flex: 1; display: flex; flex-direction: column; justify-content: center;">
         <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">👋 Chào bạn!</h3>
         <p>Tôi là Hinne, trợ lý dinh dưỡng AI của bạn.</p>
         <p style="margin-top: 1rem; font-size: 0.9rem;">Hãy đặt câu hỏi về dinh dưỡng, calo, đạm, béo...</p>
@@ -420,8 +438,25 @@ else:
             </div>
             """, unsafe_allow_html=True)
 
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Auto-scroll to bottom using JavaScript
+st.markdown("""
+<script>
+    const chatBox = document.getElementById('chat-box');
+    if (chatBox) {
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>
+""", unsafe_allow_html=True)
+
+# Add spacing for fixed input (so content doesn't hide behind it)
+st.markdown("""
+<div style="height: 180px;"></div>
+""", unsafe_allow_html=True)
+
 # =====================================================
-# 📝 INPUT AREA (STICKY - Di theo scroll)
+# 📝 INPUT AREA (FIXED AT BOTTOM)
 # =====================================================
 st.markdown('<div class="input-container">', unsafe_allow_html=True)
 
@@ -441,7 +476,6 @@ with st.form("chat_form", clear_on_submit=True):
         send_button = st.form_submit_button("📤", use_container_width=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)  # Close chat-container
 
 # =====================================================
 # 🔄 PROCESS MESSAGE
