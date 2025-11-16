@@ -45,7 +45,7 @@ if "messages" not in st.session_state:
 st.markdown("""
 <style>
   :root {
-    --bg: #fafbfc;
+    --bg: #f5f7fa;
     --card: #ffffff;
     --muted: #64748b;
     --accent: #3b82f6;
@@ -56,23 +56,46 @@ st.markdown("""
   
   * { box-sizing: border-box; }
   
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+  
   .main {
     padding: 0 !important;
     background: var(--bg);
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  /* Force sidebar to stay visible */
+  [data-testid="stSidebar"] {
+    background: var(--card);
+    width: 280px !important;
+    min-width: 280px !important;
+  }
+  
+  [data-testid="stSidebar"][aria-expanded="false"] {
+    display: flex !important;
+    width: 280px !important;
   }
   
   .block-container {
-    padding-top: 1rem;
-    padding-bottom: 130px;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-top: 1.25rem;
+    padding-bottom: 140px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
   
   /* Minimal header */
   .header-container {
     background: transparent;
-    padding: 0.75rem 0 1.5rem 0;
-    margin-bottom: 0;
+    padding: 0 0 1rem 0;
+    margin-bottom: 0.5rem;
+    flex-shrink: 0;
   }
   
   .header-title {
@@ -90,20 +113,29 @@ st.markdown("""
     font-weight: 400;
   }
   
-  /* Chat container */
+  /* Chat container - flexible, fills space */
   .chat-container {
-    max-height: calc(100vh - 200px);
+    flex: 1;
     overflow-y: auto;
     padding: 0.5rem 0;
     scroll-behavior: smooth;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
   }
   
   /* Chat message bubbles - elegant & rounded */
   .chat-message {
     display: flex;
-    margin: 0.7rem 0;
+    margin: 0.6rem 0;
     gap: 0.5rem;
     padding: 0;
+    animation: fadeIn 0.2s ease-in;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   
   .user-message {
@@ -113,12 +145,14 @@ st.markdown("""
   .user-message .message-content {
     background: var(--accent);
     color: white;
-    padding: 0.75rem 1rem;
+    padding: 0.8rem 1.1rem;
     border-radius: 18px;
     border-bottom-right-radius: 4px;
-    max-width: 70%;
+    max-width: 65%;
     word-wrap: break-word;
-    box-shadow: 0 1px 3px rgba(59, 130, 246, 0.15);
+    box-shadow: 0 1px 3px rgba(59, 130, 246, 0.2);
+    font-size: 0.95rem;
+    line-height: 1.4;
   }
   
   .bot-message {
@@ -128,13 +162,15 @@ st.markdown("""
   .bot-message .message-content {
     background: var(--card);
     color: var(--text);
-    padding: 0.75rem 1rem;
+    padding: 0.8rem 1.1rem;
     border-radius: 18px;
     border-bottom-left-radius: 4px;
-    max-width: 70%;
+    max-width: 65%;
     word-wrap: break-word;
     border: 1px solid var(--border);
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+    font-size: 0.95rem;
+    line-height: 1.4;
   }
   
   .error-message {
@@ -144,22 +180,21 @@ st.markdown("""
   .error-message .message-content {
     background: #fef2f2;
     color: #991b1b;
-    padding: 0.75rem 1rem;
+    padding: 0.8rem 1.1rem;
     border-radius: 8px;
     border-left: 3px solid #dc2626;
-    max-width: 80%;
+    max-width: 75%;
+    font-size: 0.95rem;
   }
   
   .message-icon {
     font-size: 1.1rem;
-    margin-top: 0.15rem;
+    margin-top: 0.2rem;
     flex-shrink: 0;
   }
   
   .message-content {
-    flex: 1;
-    line-height: 1.5;
-    font-size: 0.95rem;
+    flex: 0 0 auto;
   }
   
   .message-time {
@@ -178,21 +213,13 @@ st.markdown("""
     background: linear-gradient(180deg, var(--card) 0%, rgba(255, 255, 255, 0.98) 100%);
     padding: 12px 16px;
     border-top: 1px solid var(--border);
-    box-shadow: 0 -4px 12px rgba(15, 23, 42, 0.05);
+    box-shadow: 0 -2px 8px rgba(15, 23, 42, 0.06);
     z-index: 999;
   }
   
-  /* Sidebar cleanup */
+  /* Sidebar styling */
   [data-testid="stSidebar"] {
-    background: transparent;
-  }
-  
-  .sidebar-header {
-    display: none;
-  }
-  
-  .divider {
-    display: none;
+    border-right: 1px solid var(--border);
   }
   
   /* Scrollbar styling */
@@ -215,9 +242,14 @@ st.markdown("""
   
   /* Responsive */
   @media (max-width: 768px) {
+    [data-testid="stSidebar"] {
+      width: 250px !important;
+      min-width: 250px !important;
+    }
+    
     .user-message .message-content,
     .bot-message .message-content {
-      max-width: 85%;
+      max-width: 80%;
     }
   }
 </style>
