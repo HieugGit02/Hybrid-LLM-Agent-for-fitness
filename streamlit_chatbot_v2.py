@@ -21,7 +21,7 @@ import time
 # ⚙️ CẤU HÌNH
 # =====================================================
 
-API_URL = ""  # ← SỬA ĐÂY
+API_URL = "https://3925ecede99e.ngrok-free.app"  # ← SỬA ĐÂY
 
 # =====================================================
 # 🎨 STREAMLIT CONFIG
@@ -52,9 +52,7 @@ st.markdown("""
     /* Remove top padding */
     .block-container {
         padding-top: 1rem;
-        padding-bottom: 200px;
-        padding-right: 1rem;
-        padding-left: 1rem;
+        padding-bottom: 1rem;
     }
     
     /* Header styling */
@@ -62,7 +60,7 @@ st.markdown("""
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         padding: 2rem 1rem;
         border-radius: 0;
-        margin: -1rem -1rem 1rem -1rem;
+        margin: -1rem -1rem 2rem -1rem;
         color: white;
         text-align: center;
         box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
@@ -83,6 +81,7 @@ st.markdown("""
     
     /* Chat messages container */
     .chat-container {
+        max-height: calc(100vh - 400px);
         overflow-y: auto;
         padding: 1.5rem 0;
         scroll-behavior: smooth;
@@ -149,25 +148,21 @@ st.markdown("""
         margin-top: 0.5rem;
     }
     
-    /* Input area - FIXED AT BOTTOM (như ChatGPT) */
+    /* Input area - FOLLOWS SCROLL (relative, not fixed) */
     .input-container {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, white 100%);
+        position: relative;
+        background: linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, white 100%);
         padding: 1.5rem 1rem;
+        margin-top: 2rem;
         border-top: 2px solid #e0e0e0;
-        box-shadow: 0 -8px 20px rgba(0,0,0,0.12);
-        z-index: 999;
-        width: 100%;
-        box-sizing: border-box;
+        box-shadow: 0 -4px 15px rgba(0,0,0,0.08);
+        border-radius: 12px 12px 0 0;
     }
     
-    /* Adjust Streamlit sidebar if needed */
-    @media (min-width: 768px) {
-        [data-testid="stSidebar"][aria-expanded="true"] ~ .main {
-            margin-left: 0;
+    @media (max-width: 768px) {
+        .input-container {
+            padding: 1rem 0.75rem;
+            margin-top: 1rem;
         }
     }
     
@@ -382,11 +377,11 @@ st.markdown("""
 # =====================================================
 # 💬 CHAT HISTORY
 # =====================================================
-st.markdown('<div class="chat-container" id="chat-box">', unsafe_allow_html=True)
+st.markdown('<div class="chat-container">', unsafe_allow_html=True)
 
 if len(st.session_state.messages) == 0:
     st.markdown("""
-    <div style="text-align: center; padding: 3rem 1rem; color: #999; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+    <div style="text-align: center; padding: 3rem 1rem; color: #999;">
         <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">👋 Chào bạn!</h3>
         <p>Tôi là Hinne, trợ lý dinh dưỡng AI của bạn.</p>
         <p style="margin-top: 1rem; font-size: 0.9rem;">Hãy đặt câu hỏi về dinh dưỡng, calo, đạm, béo...</p>
@@ -431,19 +426,10 @@ else:
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Auto-scroll to bottom using JavaScript
-st.markdown("""
-<script>
-    const chatBox = document.getElementById('chat-box');
-    if (chatBox) {
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
-</script>
-""", unsafe_allow_html=True)
+# =====================================================
+# 📝 INPUT AREA (FOLLOWS SCROLL)
+# =====================================================
 
-# =====================================================
-# 📝 INPUT AREA (FIXED AT BOTTOM)
-# =====================================================
 st.markdown('<div class="input-container">', unsafe_allow_html=True)
 
 # Input form
